@@ -26,7 +26,8 @@ steps:
       - '--allow-unauthenticated'
 
 options:
-  logging: CLOUD_LOGGING_ONLY
+  logsBucketBehavior: 'REGIONAL_USER_OWNED_BUCKET'
+  logging: 'GCS_ONLY'
 
 substitute:
   _REGION: 'us-central1'
