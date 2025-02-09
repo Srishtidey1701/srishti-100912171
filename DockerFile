@@ -1,17 +1,21 @@
-# Use an official Node.js runtime as a parent image
-FROM node:14
+# Use the node:19.7.0-alpine base image
+FROM node:19.7.0-alpine
 
-# Set the working directory in the container
-WORKDIR /app
+# Set the environment variable NODE_ENV with a value of production.
+ENV NODE_ENV=production
 
-# Copy the application files and JSON files to the container
-COPY . /app
+RUN mkdir /labone && chown node:node /labone
 
-# Install any dependencies listed in package.json
+WORKDIR /labone
+
+USER node
+
+COPY --chown=node:node . .
+
 RUN npm install
 
-# Expose port 8080
 EXPOSE 3000
 
-# Command to run the application (adjust if your main file is different)
-CMD ["node", "index.js"]
+CMD ["node", "src/index.js"]
+
+
