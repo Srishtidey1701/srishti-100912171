@@ -28,6 +28,9 @@ steps:
 options:
   logging: CLOUD_LOGGING_ONLY
 
+substitute:
+  _REGION: 'us-central1'
+
 images:
   - 'gcr.io/sunny-buttress-448517-f8/srishti-100912171:$COMMIT_SHA'
 
