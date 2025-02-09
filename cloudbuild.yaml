@@ -15,11 +15,11 @@ steps:
 
   # Step 3: Deploy the Docker image to Google Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
     args:
-      - 'gcloud'
       - 'run'
       - 'deploy'
-      - 'my-cloud-run-service'
+      - 'my-cloud-run-service'  # Update this with your actual service name
       - '--image=gcr.io/sunny-buttress-448517-f8/srishti-100912171:$COMMIT_SHA'
       - '--region=us-central1'
       - '--platform=managed'
@@ -30,5 +30,3 @@ options:
 
 images:
   - 'gcr.io/sunny-buttress-448517-f8/srishti-100912171:$COMMIT_SHA'
-
-
