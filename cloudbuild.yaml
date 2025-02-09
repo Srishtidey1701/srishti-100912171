@@ -1,0 +1,37 @@
+steps:
+  # Step 1: Build Docker Image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/sunny-buttress-448517-f8/sunny-buttress-448517-f8:$COMMIT_SHA'
+      - '.'
+
+  # Step 2: Push Docker Image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'us-central1-docker.pkg.dev/sunny-buttress-448517-f8/sunny-buttress-448517-f8:$COMMIT_SHA'
+
+  # Step 3: Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud run deploy my-cloud-run-service \
+        --image=us-central1-docker.pkg.dev/sunny-buttress-448517-f8/sunny-buttress-448517-f8:$COMMIT_SHA \
+        --region=us-central1 \
+        --platform=managed \
+        --allow-unauthenticated
+
+options:
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+
+substitutions:
+  _SERVICE_NAME: "my-cloud-run-service"
+
+images:
+  - 'us-central1-docker.pkg.dev/sunny-buttress-448517-f8/sunny-buttress-448517-f8:$COMMIT_SHA'
+
+timeout: 600s
