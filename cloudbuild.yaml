@@ -26,11 +26,7 @@ steps:
       - '--allow-unauthenticated'
 
 options:
-  logsBucketBehavior: 'REGIONAL_USER_OWNED_BUCKET'
-  logging: 'GCS_ONLY'
-
-substitute:
-  _REGION: 'us-central1'
+  logging: CLOUD_LOGGING_ONLY
 
 images:
   - 'gcr.io/sunny-buttress-448517-f8/srishti-100912171:$COMMIT_SHA'
