@@ -1,37 +1,38 @@
 steps:
-  # Step 1: Build Docker Image
+  # Step 1: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
       - '-t'
-      - 'us-central1-docker.pkg.dev/sunny-buttress-448517-f8/sunny-buttress-448517-f8:$COMMIT_SHA'
+      - 'gcr.io/sunny-buttress-448517-f8/srishti-100912171:$COMMIT_SHA'
       - '.'
 
-  # Step 2: Push Docker Image to Artifact Registry
+  # Step 2: Push the Docker image to Google Container Registry
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - 'us-central1-docker.pkg.dev/sunny-buttress-448517-f8/sunny-buttress-448517-f8:$COMMIT_SHA'
+      - 'gcr.io/sunny-buttress-448517-f8/srishti-100912171:$COMMIT_SHA'
 
-  # Step 3: Deploy to Cloud Run
+  # Step 3: Deploy the Docker image to Google Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: 'bash'
     args:
-      - '-c'
-      - |
-        gcloud run deploy my-cloud-run-service \
-        --image=us-central1-docker.pkg.dev/sunny-buttress-448517-f8/sunny-buttress-448517-f8:$COMMIT_SHA \
-        --region=us-central1 \
-        --platform=managed \
-        --allow-unauthenticated
+      - 'gcloud'
+      - 'run'
+      - 'deploy'
+      - 'my-cloud-run-service'
+      - '--image=gcr.io/sunny-buttress-448517-f8/srishti-100912171:$COMMIT_SHA'
+      - '--region=$_REGION'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
 
 options:
-  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+  logsBucketBehavior: 'REGIONAL_USER_OWNED_BUCKET'
+  logging: 'GCS_ONLY'
 
-substitutions:
-  _SERVICE_NAME: "my-cloud-run-service"
+substitute:
+  _REGION: 'us-central1'
 
 images:
-  - 'us-central1-docker.pkg.dev/sunny-buttress-448517-f8/sunny-buttress-448517-f8:$COMMIT_SHA'
+  - 'gcr.io/sunny-buttress-448517-f8/srishti-100912171:$COMMIT_SHA'
 
-timeout: 600s
+
